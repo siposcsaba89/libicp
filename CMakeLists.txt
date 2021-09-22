@@ -25,10 +25,17 @@ endif(USE_OPENMP)
 
 # sources
 FILE(GLOB LIBICP_SRC_FILES "src/*.cpp")
+FILE(GLOB LIBICP_HDR_FILES "src/*.h")
 
 # make release version
 set(CMAKE_BUILD_TYPE Release)
 
 # build demo program
-add_executable(icp ${LIBICP_SRC_FILES})
+#add_executable(icp ${LIBICP_SRC_FILES})
+add_library(libicp ${LIBICP_SRC_FILES})
+set_target_properties(libicp PROPERTIES DEBUG_POSTFIX _d)
+target_include_directories(libicp PUBLIC $<INSTALL_INTERFACE:include/libicp>)
 
+install(TARGETS libicp EXPORT libicp-config LIBRARY DESTINATION lib ARCHIVE DESTINATION lib RUNTIME DESTINATION bin)
+install(EXPORT libicp-config NAMESPACE libicp:: DESTINATION lib/cmake/libicp)
+install(FILES ${LIBICP_HDR_FILES} DESTINATION include/libicp)

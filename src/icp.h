@@ -26,8 +26,8 @@ Street, Fifth Floor, Boston, MA 02110-1301, USA
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
+#include <Eigen/Geometry>
 
-#include "matrix.h"
 #include "kdtree.h"
 
 class Icp {
@@ -38,7 +38,7 @@ public:
 	// input: M ....... pointer to first model point
 	//        M_num ... number of model points
 	//        dim   ... dimensionality of model points (2 or 3)
-	Icp (double *M,const int32_t M_num,const int32_t dim);
+	Icp(const std::vector<Eigen::Vector3f> &M);
 
 	// deconstructor
 	virtual ~Icp ();
@@ -65,7 +65,7 @@ public:
 	//         indist .. inlier distance (if <=0: use all points)
 	// output: R ....... final rotation matrix
 	//         t ....... final translation vector
-	double fit(double *T,const int32_t T_num,Matrix &R,Matrix &t,double indist=-1);
+	double fit(const std::vector<Eigen::Vector2f>& T, Eigen::Isometry2f &R, float indist=-1.0f);
 
   
 private:
@@ -84,7 +84,6 @@ protected:
 	kdtree::KDTree*     m_kd_tree;
 	kdtree::KDTreeArray m_kd_data;
 
-	int32_t m_dim;       // dimensionality of model + template data (2 or 3)
 	int32_t m_max_iter;  // max number of iterations
 	double  m_min_delta; // min parameter delta
 

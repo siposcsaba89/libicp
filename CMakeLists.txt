@@ -6,6 +6,8 @@ project (libicp)
 set (LIBICP_SRC_DIR src)
 FIND_PATH(BOOST_DIR "boost")
 
+find_package(Eigen3 REQUIRED CONFIG)
+
 # include directory
 include_directories("${LIBICP_SRC_DIR}")
 include_directories("${BOOST_DIR}")
@@ -33,6 +35,7 @@ set(CMAKE_BUILD_TYPE Release)
 # build demo program
 #add_executable(icp ${LIBICP_SRC_FILES})
 add_library(libicp ${LIBICP_SRC_FILES})
+target_link_libraries(libicp PUBLIC Eigen3::Eigen)
 set_target_properties(libicp PROPERTIES DEBUG_POSTFIX _d)
 target_include_directories(libicp PUBLIC $<INSTALL_INTERFACE:include/libicp>)
 
